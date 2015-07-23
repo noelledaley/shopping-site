@@ -12,23 +12,21 @@
             <th>Total</th>
         </tr>
         </thead>
+
         <tbody>
-        <tr>
-            <td>Ancient Watermelon</td>
-            <td>5</td>
-            <td>$3.00</td>
-            <td>$15.00</td>
-        </tr>
-        <tr>
-            <td>Charleston Gray</td>
-            <td>2</td>
-            <td>$2.00</td>
-            <td>$4.00</td>
-        </tr>
+            {% for melon in session %}
+                <tr>melon
+                    <td>{{ melon[0] }}</td>
+                    <td>quantity</td>
+                    <td>${{ melon[1] }}</td>
+                    <td>quantity * price</td>
+                </tr>
+            {% endfor %}
         </tbody>
     </table>
 
-    {{ session['cart'] }}
+    
+    
 
     <h3>Total: $27.00</h3>
 

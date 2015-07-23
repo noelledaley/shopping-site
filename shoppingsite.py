@@ -77,13 +77,13 @@ def add_to_cart(id):
     # TODO: Finish shopping cart functionality
     #   - use session variables to hold cart list
 
-    cart = []
     melon = model.Melon.get_by_id(id)
-    cart.append(melon) 
+    # melon_name = melon.common_name
+    # melon_price = melon.price
 
-    session['cart'] = cart
-
-    print session['cart']
+    session['unique_melon'] = [melon.common_name, melon.price]
+    # session['name'] = melon.common_name
+    # session['price'] = melon.price
 
     return render_template("cart.html")
 
