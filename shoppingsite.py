@@ -7,10 +7,11 @@ Authors: Joel Burton, Christian Fernandez, Meggie Mahnken.
 """
 
 
-from flask import Flask, render_template, redirect, flash, session
+from flask import Flask, render_template, redirect, flash, session, jsonify
 import jinja2
 
 import model
+
 
 
 app = Flask(__name__)
@@ -78,12 +79,11 @@ def add_to_cart(id):
     #   - use session variables to hold cart list
 
     melon = model.Melon.get_by_id(id)
-    # melon_name = melon.common_name
-    # melon_price = melon.price
 
-    session['unique_melon'] = [melon.common_name, melon.price]
-    # session['name'] = melon.common_name
-    # session['price'] = melon.price
+    if 'cart' not in session:
+        session['cart'] = []
+    session['cart'].append(melon.id)
+    flash("You added a melon to your cart! Woo!")
 
     return render_template("cart.html")
 

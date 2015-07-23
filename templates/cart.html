@@ -14,11 +14,11 @@
         </thead>
 
         <tbody>
-            {% for melon in session %}
-                <tr>melon
-                    <td>{{ melon[0] }}</td>
+            {% for melon_id in session['cart'] %}
+                <tr>
+                    <td>{{ melon_id }}</td>
                     <td>quantity</td>
-                    <td>${{ melon[1] }}</td>
+                    <td>price</td>
                     <td>quantity * price</td>
                 </tr>
             {% endfor %}
