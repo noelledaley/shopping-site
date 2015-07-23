@@ -69,7 +69,7 @@ class Melon(object):
 
         melons = [Melon(*row) for row in melon_rows]
 
-        print melons
+        # print melons
 
         return melons
 
