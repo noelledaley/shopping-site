@@ -14,19 +14,19 @@
         </thead>
 
         <tbody>
-            {% for melon_id in session['cart'] %}
+            {% for melon_details in cart %}
                 <tr>
-                    <td>{{ melon_id }}</td>
-                    <td>quantity</td>
-                    <td>price</td>
-                    <td>quantity * price</td>
+                    <td>{{ melon_details['common_name'] }}</td>
+                    <td>{{ melon_details['qty'] }}</td>
+                    <td>{{ melon_details['cost'] }}</td>
+                    <td>{{ melon_details['total_cost']}}</td>
                 </tr>
             {% endfor %}
         </tbody>
     </table>
 
-    
-    
+
+
 
     <h3>Total: $27.00</h3>
 

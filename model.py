@@ -61,15 +61,20 @@ class Melon(object):
                """
 
         cursor.execute(QUERY, (max,))
+
+        # returns list of tuples where values of tuples are (id, melon_type, common_name, etc.)
         melon_rows = cursor.fetchall()
 
         # list comprehension to build a list of Melon objects by going through
         # the database records and making a melon for each row. This is done
         # by unpacking in the for-loop.
 
+        # Melon(*row) creates a list of melon objects using the tuples as attributes
+            # ex:
+            # tuple = (watermelon, $12, seedless)
+            # newMelon = Melon(watermelon, $12, seedless)
+            # add each newMelon to list called melons
         melons = [Melon(*row) for row in melon_rows]
-
-        # print melons
 
         return melons
 
@@ -98,6 +103,7 @@ class Melon(object):
         if not row:
             return None
 
+        # create a new instance of Melon where attributes passed are values from row
         melon = Melon(*row)
 
         return melon
@@ -124,4 +130,3 @@ def db_connect():
     conn = sqlite3.connect("melons.db")
     cursor = conn.cursor()
     return cursor
-

@@ -39,23 +39,24 @@ def index():
 def list_melons():
     """Return page showing all the melons ubermelon has to offer"""
 
+    # melons = list of melon objects
     melons = model.Melon.get_all()
-    return render_template("all_melons.html",
-                           melon_list=melons)
+
+    return render_template("all_melons.html", melon_list=melons)
 
 
 @app.route("/melon/<int:id>")
+# How does it receive this argument...?
 def show_melon(id):
     """Return page showing the details of a given melon.
 
     Show all info about a melon. Also, provide a button to buy that melon.
     """
 
+    # passing in id, returns an instance of Melon
     melon = model.Melon.get_by_id(id)
-    print melon
-    return render_template("melon_details.html",
-                           display_melon=melon)
 
+    return render_template("melon_details.html", display_melon=melon)
 
 
 @app.route("/add_to_cart/<int:id>")
@@ -71,12 +72,14 @@ def add_to_cart(id):
 
     melon = model.Melon.get_by_id(id)
 
-    if 'cart' not in session:
-        session['cart'] = []
-    session['cart'].append(melon.id)
+    # check if the key 'cart' is already in session.
+    # if it's not, create a new key where the value is an empty list.
+    # then, append the melon ID to that list.
+    session.setdefault('cart', []).append(id)
+
     flash("You added a melon to your cart! Woo!")
 
-    return render_template("cart.html")
+    return redirect("/cart")
 
 
 @app.route("/cart")
@@ -85,27 +88,44 @@ def shopping_cart():
 
     order_total = 0
 
-    raw_cart = session.get('cart', [])
+    session_cart = session.get('cart', [])
 
     cart = {}
 
-    for melon_id in raw_cart:
-        
+    for melon_id in session_cart:
+
+        # looks in cart for a key called melon_id
+        # if key doesn't already exist, add it with a value of an empty dictionary
+        # result will be nested dict
+            # ex:
+            # {melon_id: {'qty': 1, 'common_name': 2...}}
         melon = cart.setdefault(melon_id, {})
 
+        # if value of melon key isnt' blank
         if melon:
             melon['qty'] += 1
 
+        # if value of melon key is empty
         else:
+            # create an instance of the melon
             melon_attr = model.Melon.get_by_id(melon_id)
+
+            # add new key to melon dict, set value to the melon's common name
+            # {14: {'common_name': 'watermelon'}}
             melon['common_name'] = melon_attr.common_name
             melon['cost'] = melon_attr.price
             melon['qty'] = 1
-                
+
+        # add new key called total_cost
+        # {12: {'qty': 4, 'common_name': 'crenshaw', 'cost': 10, 'total_cost': 40}}
+        # order total += 40
         melon['total_cost'] = melon['cost'] * melon['qty']
         order_total += melon['total_cost']
 
-    cart=cart.values()
+    # cart will return list of little dictionaries
+    # ex:
+        # [{'qty': 4, 'common_name': 'crenshaw', 'cost': 10, 'total_cost': 40}]
+    cart = cart.values()
 
     return render_template("cart.html", cart=cart, order_total=order_total)
 
