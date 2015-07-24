@@ -57,15 +57,6 @@ def show_melon(id):
                            display_melon=melon)
 
 
-@app.route("/cart")
-def shopping_cart():
-    """Display content of shopping cart."""
-
-    # TODO: Display the contents of the shopping cart.
-    #   - The cart is a list in session containing melons added
-
-    return render_template("cart.html")
-
 
 @app.route("/add_to_cart/<int:id>")
 def add_to_cart(id):
@@ -86,6 +77,37 @@ def add_to_cart(id):
     flash("You added a melon to your cart! Woo!")
 
     return render_template("cart.html")
+
+
+@app.route("/cart")
+def shopping_cart():
+    """Display content of shopping cart."""
+
+    order_total = 0
+
+    raw_cart = session.get('cart', [])
+
+    cart = {}
+
+    for melon_id in raw_cart:
+        
+        melon = cart.setdefault(melon_id, {})
+
+        if melon:
+            melon['qty'] += 1
+
+        else:
+            melon_attr = model.Melon.get_by_id(melon_id)
+            melon['common_name'] = melon_attr.common_name
+            melon['cost'] = melon_attr.price
+            melon['qty'] = 1
+                
+        melon['total_cost'] = melon['cost'] * melon['qty']
+        order_total += melon['total_cost']
+
+    cart=cart.values()
+
+    return render_template("cart.html", cart=cart, order_total=order_total)
 
 
 @app.route("/login", methods=["GET"])
