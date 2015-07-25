@@ -115,11 +115,12 @@ class Customer(object):
     A wrapper object that corresponds to rows in the customers table.
     """
 
-    def __init__ (self, email, fname, lname, pswd):
+    def __init__ (self, email, first_name, last_name, password):
         self.email = email
-        self.fname = fname
-        self.lname = lname
-        self.pswd = pswd
+        self.first_name = fname
+        self.last_name = lname
+        self.password = pswd
+
 
     @classmethod
     def get_by_email(cls, email):
